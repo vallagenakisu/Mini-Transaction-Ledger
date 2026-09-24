@@ -1,0 +1,60 @@
+## Rider IDE
+.idea/
+*.sln.iml
+*.swp
+*.swo
+
+## .NET
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.usercodeanalysiscache
+*.userprefs
+.DS_Store?
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+.nuget/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+
+## Frontend
+node_modules/
+dist/
+frontend/.vite/
+frontend/dist/
+.parcel-cache
+.cache
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+
+## Local development
+*.env
+*.env.local
+*.env.*.local
+appsettings.Development.local.json
+
+## IDE & Editor
+*.code-workspace
+.vscode/
+launch.json
+settings.json
+
+## OS
+Thumbs.db
+Desktop.ini
