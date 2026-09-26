@@ -15,5 +15,9 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-    }   
+        
+        modelBuilder.HasSequence<int>("transaction_reference_seq")
+            .StartsAt(1)
+            .IncrementsBy(1);
+    }  
 }

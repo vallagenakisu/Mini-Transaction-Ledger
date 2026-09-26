@@ -14,7 +14,6 @@ public class Transaction
     public Transaction ReversalOf { get; set; }
     public Transaction ReversedBy { get; set; }
     public ICollection<JournalEntry> JournalEntries { get; set; } = new List<JournalEntry>();
-
-    public bool IsReversed => ReversalOfTransactionId.HasValue;
-    public bool IsReversal => ReversedByTransactionId.HasValue;
+    public bool IsReversal => ReversalOfTransactionId.HasValue;
+    public bool IsReversed => ReversedByTransactionId.HasValue;
 }
