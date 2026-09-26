@@ -2,6 +2,6 @@ namespace Ledger.Models;
 
 public enum UserRole
 {
-    ACCOUNTANT = 0,
-    ADMIN = 1
+    Accountant = 0,
+    Admin = 1
 }
