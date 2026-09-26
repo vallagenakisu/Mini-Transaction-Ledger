@@ -48,6 +48,7 @@ frontend/dist/
 *.env.local
 *.env.*.local
 appsettings.Development.local.json
+appsettings.Development.json
 
 ## IDE & Editor
 *.code-workspace
