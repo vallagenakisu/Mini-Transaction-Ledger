@@ -428,6 +428,10 @@ docker exec -it misl-postgres psql -U postgres -d ledger -c "SELECT account_numb
 ```
 11 accounts and 2 users should be present. Restart the app — row counts must not change.
 
+> **As of `10 §7.1` the seeder inserts the two users only**, so a fresh database now starts
+> with **0 accounts and 2 users**. The idempotency check this section is really testing —
+> that a restart never changes row counts — still applies, and is now guarded on `Users`.
+
 ---
 
 ## 8. Viva questions this step answers

@@ -1,75 +1,77 @@
-# React + TypeScript + Vite
+# Ledger — frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript client for the Mini Transaction Ledger. Seven screens over the
+ASP.NET Core API: the chart of accounts, account statements with a running balance, the
+journal, a general-journal entry form with a live balance indicator, and the trial
+balance.
 
-Currently, two official plugins are available:
+The app opens on the chart of accounts and every posting route is entered from one of
+them, so an entry always starts from the account it concerns — see
+[`../docs/frontend-user-guide.md`](../docs/frontend-user-guide.md) for the flow.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The design decisions behind it — why debits are indigo and credits are ochre rather than
+red and green, why there is no CORS policy, why the entry form has no direction dropdown
+— are written up in [`../docs/10-frontend.md`](../docs/10-frontend.md).
 
-## React Compiler
+## Running it
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The API must be up first; the dev server proxies `/api` to it.
 
-## Expanding the ESLint configuration
+```bash
+# terminal 1 — API on http://localhost:5086
+cd ../backend/Ledger/Ledger
+dotnet run --launch-profile http
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+# terminal 2 — client on http://localhost:5173
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+If the API is on a different port:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+VITE_API_PROXY_TARGET=http://localhost:5286 npm run dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Seeded demo users
+
+Both are created by `DbSeeder` on a fresh database, and the login screen will fill either
+one for you.
+
+| Email | Password | Role |
+|---|---|---|
+| `admin@misl.com` | `Admin@123` | Admin — may reverse transactions and manage accounts |
+| `accountant@misl.com` | `Accountant@123` | Accountant — may post, may not reverse |
+
+> The demo transactions only appear on a **fresh** database: the seeder returns early if
+> any accounts already exist.
+
+## Scripts
+
+| Command | Does |
+|---|---|
+| `npm run dev` | Vite dev server with HMR and the `/api` proxy |
+| `npm run build` | `tsc -b && vite build` → `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint over `src/` |
+
+## Layout
 
 ```
+src/
+├── api/          axios instance, both interceptors, one module per resource
+├── auth/         AuthContext, provider, useAuth, RequireAuth / RequireAdmin
+├── components/   ui/ primitives (Radix + cva) and the domain components
+├── hooks/        useApi, useLedgerRevision, useTheme
+├── lib/          cn, money and date formatting, the normal-balance table
+├── pages/        one file per route
+└── types/api.ts  TypeScript mirrors of the backend DTOs
+```
+
+Two rules the codebase holds to:
+
+- **`lib/format.ts` formats; it never computes.** Every amount on screen was calculated by
+  the server in `decimal`. The one place the client adds money — the live balance beam on
+  the entry form — sums integer paisa and the server re-checks it anyway.
+- **Hiding a control is UX, not security.** Every role rule is enforced independently by
+  the API from the token's claims.

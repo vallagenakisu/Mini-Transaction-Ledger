@@ -1440,6 +1440,12 @@ immediately legible. Build them by inserting `Transaction` + `JournalEntry` enti
 rather than calling `ITransactionService`, so the seeder does not need an HTTP user id, and
 keep the `if (await context.Accounts.AnyAsync()) return;` idempotency guard covering them.
 
+> **Done in `09`, then undone in `10 §7.1`.** The demo data was built as described here and
+> later removed: an operator could not delete it, because that exact `Accounts.AnyAsync()`
+> guard treated an emptied chart of accounts as a fresh database and put it all back. The
+> frontend's empty state replaced it. Worth knowing as a worked example of a reasonable
+> suggestion whose guard condition was the thing that made it wrong.
+
 ---
 
 ## 11. Viva questions this step answers

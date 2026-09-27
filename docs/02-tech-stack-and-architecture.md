@@ -161,7 +161,8 @@ backend/
     │   ├── AppDbContext.cs
     │   ├── Configurations/   IEntityTypeConfiguration<T> per entity
     │   ├── Migrations/       EF-generated
-    │   └── DbSeeder.cs       idempotent chart of accounts + demo transactions
+    │   └── DbSeeder.cs       idempotent; seeds the two login users only (see `10 §7.1` —
+    │                         it also seeded a demo chart of accounts until step 10)
     ├── Models/           User, Account, Transaction, JournalEntry,
     │                     AccountType, EntryDirection, UserRole
     ├── Dtos/             request + response records, grouped by feature

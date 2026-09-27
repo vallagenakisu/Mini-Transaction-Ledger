@@ -28,7 +28,7 @@ backend/Ledger/Ledger/
 ├── Controllers/
 │   ├── ReportsController.cs        (GET /api/reports/trial-balance)
 │   └── DashboardController.cs      (GET /api/dashboard/summary)
-├── Data/DbSeeder.cs                (modified — five demo transactions)
+├── Data/DbSeeder.cs                (modified — five demo transactions; later removed, `10 §7.1`)
 └── Program.cs                      (modified — DI)
 ```
 
@@ -438,6 +438,11 @@ continuous run. Verified below: the first posted transaction after seeding gets
 chart of accounts will never see the demo transactions — it is skipped entirely. Only a fresh
 database (a new clone, or `docker compose down -v` in step 11) gets them. That is the intended
 behaviour, and it is why the verification below runs against a brand-new database.
+
+> **Superseded in step 10.** The demo accounts and these demo transactions were removed
+> from the seeder, and the guard moved to `Users.AnyAsync()`, so that an operator can start
+> a ledger from nothing and have it stay that way across restarts. The reasoning is in
+> `10 §7.1`; this section stands as the record of what step 9 built.
 
 ---
 
