@@ -7,6 +7,7 @@ import {
   PenLineIcon,
   ScaleIcon,
   SunIcon,
+  UsersIcon,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
@@ -29,6 +30,7 @@ interface NavItem {
   end?: boolean
   /** Extra path prefixes this item owns — `/` is Accounts, and so is `/accounts/7`. */
   owns?: string[]
+  adminOnly?: boolean
 }
 
 const NAV: { group: string | null; items: NavItem[] }[] = [
@@ -50,9 +52,11 @@ const NAV: { group: string | null; items: NavItem[] }[] = [
       { to: '/reports/trial-balance', label: 'Trial Balance', icon: ScaleIcon },
     ],
   },
+  {
+    group: 'Admin',
+    items: [{ to: '/users', label: 'Users', icon: UsersIcon, adminOnly: true }],
+  },
 ]
-
-const ALL_ITEMS = NAV.flatMap((section) => section.items)
 
 /**
  * Whether a nav item owns the current path.
@@ -80,9 +84,16 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 export function AppShell() {
   const location = useLocation()
+  const { isAdmin } = useAuth()
+
+  const nav = NAV.map((section) => ({
+    ...section,
+    items: section.items.filter((item) => isAdmin || !item.adminOnly),
+  })).filter((section) => section.items.length > 0)
+  const items = nav.flatMap((section) => section.items)
 
   // Longest match wins, so `/transactions/new` reports "New Entry" and not "Journal".
-  const current = ALL_ITEMS.filter((item) => owns(item, location.pathname)).sort(
+  const current = items.filter((item) => owns(item, location.pathname)).sort(
     (a, b) => b.to.length - a.to.length,
   )[0]
 
@@ -94,7 +105,7 @@ export function AppShell() {
         </div>
 
         <nav className="flex-1 space-y-6 overflow-y-auto px-3">
-          {NAV.map((section) => (
+          {nav.map((section) => (
             <div key={section.group ?? 'root'} className="space-y-0.5">
               {section.group ? <p className="eyebrow px-2.5 pb-2">{section.group}</p> : null}
               {section.items.map((item) => (
@@ -121,7 +132,7 @@ export function AppShell() {
 
         {/* Horizontal nav for narrow viewports — the rail's content, laid on its side. */}
         <nav className="scrollbar-none flex gap-1 overflow-x-auto border-b border-rule px-3 py-2 lg:hidden">
-          {ALL_ITEMS.map((item) => (
+          {items.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -136,11 +147,6 @@ export function AppShell() {
         <main className="mx-auto w-full max-w-[78rem] flex-1 px-5 py-8 sm:px-8 sm:py-10">
           <Outlet />
         </main>
-
-        <footer className="border-t border-rule px-5 py-4 text-[0.75rem] text-faint sm:px-8">
-          Mini Transaction Ledger · balances are derived from the journal on every request,
-          never stored.
-        </footer>
       </div>
     </div>
   )

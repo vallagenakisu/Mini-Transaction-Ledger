@@ -23,6 +23,23 @@ export interface LoginRequest {
   password: string
 }
 
+export interface RegisterRequest {
+  fullName: string
+  email: string
+  password: string
+}
+
+/** A user as the admin-only user list sees it — includes status, unlike `User`. */
+export interface ManagedUser extends User {
+  isActive: boolean
+  createdAt: string
+}
+
+export interface UpdateUserRequest {
+  isActive?: boolean
+  role?: UserRole
+}
+
 export interface LoginResponse {
   token: string
   expiresAtUtc: string

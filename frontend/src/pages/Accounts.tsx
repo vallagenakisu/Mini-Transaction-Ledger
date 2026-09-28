@@ -167,7 +167,6 @@ export default function Accounts() {
           {narrowed ? (
             <EmptyState
               title="Nothing matches those filters"
-              detail="Try a different type, or clear the search."
               action={
                 <Button variant="outline" size="sm" onClick={resetFilters}>
                   Reset filters
@@ -177,11 +176,6 @@ export default function Accounts() {
           ) : (
             <EmptyState
               title="No accounts yet"
-              detail={
-                isAdmin
-                  ? 'A ledger starts with the accounts it can post to. Open the first one — typically a cash or bank account, and an equity account to fund it from.'
-                  : 'Nothing can be posted until an administrator opens the first account.'
-              }
               action={
                 isAdmin ? (
                   <Button size="sm" onClick={() => setCreating(true)}>
@@ -208,7 +202,6 @@ export default function Accounts() {
                     <span className="eyebrow">
                       {meta.range} · {meta.normalBalance}-normal
                     </span>
-                    <span className="text-[0.8125rem] text-faint">{meta.blurb}</span>
                   </div>
                   <span className="flex items-baseline gap-2">
                     <span className="eyebrow">Subtotal</span>

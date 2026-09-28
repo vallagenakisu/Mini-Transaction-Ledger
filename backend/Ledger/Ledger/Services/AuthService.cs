@@ -6,6 +6,7 @@ using System.Text;
 using Ledger.Configuration;
 using Ledger.Data;
 using Ledger.Dtos.Auth;
+using Ledger.Exceptions;
 using Ledger.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -29,19 +30,49 @@ public class AuthService : IAuthService
         var user = await _context.Users
             .SingleOrDefaultAsync(u => u.Email == email);
 
-        if (user is null || !user.IsActive)
+        if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             return null;
         }
 
-        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        // Only reached with the right password, so saying the account is inactive tells the
+        // caller nothing they could not already prove — unlike a wrong-password reply would.
+        if (!user.IsActive)
         {
-            return null;
+            throw new ForbiddenException(
+                "This account is not active. An administrator needs to approve it.");
         }
 
         var expiresAtUtc = DateTime.UtcNow.AddMinutes(_jwt.ExpiryMinutes);
 
         return new LoginResponseDto(GenerateToken(user, expiresAtUtc), expiresAtUtc, ToDto(user));
+    }
+
+    public async Task<UserDto> RegisterAsync(RegisterRequestDto request)
+    {
+        var email = request.Email.Trim().ToLowerInvariant();
+
+        if (await _context.Users.AnyAsync(u => u.Email == email))
+        {
+            throw new ConflictException("An account with this email already exists.");
+        }
+
+        // Self-registered users are always Accountants and start inactive: anyone can ask
+        // for access, only an Admin can grant it.
+        var user = new User
+        {
+            FullName = request.FullName.Trim(),
+            Email = email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            Role = UserRole.Accountant,
+            IsActive = false,
+            CreatedAt = DateTime.UtcNow,
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        return ToDto(user);
     }
 
     public async Task<UserDto?> GetCurrentUserAsync(int userId)

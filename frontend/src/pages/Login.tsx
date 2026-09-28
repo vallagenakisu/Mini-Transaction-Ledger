@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 
 import { ApiError } from '@/api/client'
 import { useAuth } from '@/auth/useAuth'
-import { Wordmark } from '@/components/Wordmark'
+import { AuthLayout } from '@/components/AuthLayout'
 import { FormError } from '@/components/states'
 import { Button } from '@/components/ui/button'
 import { Field, Input } from '@/components/ui/field'
@@ -49,106 +49,68 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[1.1fr_1fr]">
-      <div className="hidden items-center justify-center border-r border-rule p-16 lg:flex">
-        <BalanceMark />
+    <AuthLayout>
+      <h1 className="font-display text-[2rem] leading-tight font-medium text-ink">Sign in</h1>
+
+      <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+        <Field label="Email" htmlFor="email">
+          <Input
+            id="email"
+            type="email"
+            autoComplete="username"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="you@misl.com"
+          />
+        </Field>
+
+        <Field label="Password" htmlFor="password">
+          <Input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="••••••••"
+          />
+        </Field>
+
+        {error ? <FormError>{error}</FormError> : null}
+
+        <Button type="submit" size="lg" className="w-full" disabled={pending}>
+          {pending ? 'Signing in…' : 'Sign in'}
+        </Button>
+      </form>
+
+      <p className="mt-5 text-[0.875rem] text-muted">
+        No account?{' '}
+        <Link to="/register" className="text-ink underline underline-offset-4">
+          Register
+        </Link>
+      </p>
+
+      <div className="mt-10 border-t border-rule pt-5">
+        <p className="eyebrow mb-2">Demo users</p>
+        <ul>
+          {DEMO_USERS.map((user) => (
+            <li key={user.email}>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail(user.email)
+                  setPassword(user.password)
+                }}
+                className="flex w-full items-baseline justify-between gap-3 rounded-md px-2.5 py-2 text-left transition-colors hover:bg-accent"
+              >
+                <span className="num truncate text-[0.8125rem] text-ink">{user.email}</span>
+                <span className="eyebrow shrink-0">{user.role}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <div className="flex items-center justify-center px-6 py-14">
-        <div className="w-full max-w-sm">
-          <Wordmark className="mb-10" />
-
-          <h1 className="font-display text-[2rem] leading-tight font-medium text-ink">Sign in</h1>
-
-          <form onSubmit={handleSubmit} className="mt-7 space-y-4">
-            <Field label="Email" htmlFor="email">
-              <Input
-                id="email"
-                type="email"
-                autoComplete="username"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@misl.com"
-              />
-            </Field>
-
-            <Field label="Password" htmlFor="password">
-              <Input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="••••••••"
-              />
-            </Field>
-
-            {error ? <FormError>{error}</FormError> : null}
-
-            <Button type="submit" size="lg" className="w-full" disabled={pending}>
-              {pending ? 'Signing in…' : 'Sign in'}
-            </Button>
-          </form>
-
-          <div className="mt-10 border-t border-rule pt-5">
-            <p className="eyebrow mb-2">Demo users</p>
-            <ul>
-              {DEMO_USERS.map((user) => (
-                <li key={user.email}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEmail(user.email)
-                      setPassword(user.password)
-                    }}
-                    className="flex w-full items-baseline justify-between gap-3 rounded-md px-2.5 py-2 text-left transition-colors hover:bg-accent"
-                  >
-                    <span className="num truncate text-[0.8125rem] text-ink">{user.email}</span>
-                    <span className="eyebrow shrink-0">{user.role}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/**
- * The left panel is one drawing and nothing else.
- *
- * It replaced a headline, a paragraph and a worked ledger example — all of which spent
- * words on the single thing the picture already states. A beam at rest, with one pan in
- * each of the two ledger hues, *is* the premise of double-entry; a caption underneath it
- * would only be the same claim, more slowly.
- */
-function BalanceMark() {
-  return (
-    <svg
-      viewBox="0 0 240 200"
-      fill="none"
-      role="img"
-      aria-label="A balance at rest, its two pans level"
-      className="w-full max-w-[23rem] text-rule-strong"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    >
-      <path d="M98 176h44" stroke="currentColor" />
-      <path d="M120 176V58" stroke="currentColor" />
-      <circle cx="120" cy="54" r="3.5" fill="currentColor" />
-      <path d="M44 54h152" stroke="currentColor" />
-      <path d="M48 54v32" stroke="currentColor" />
-      <path d="M192 54v32" stroke="currentColor" />
-
-      <path d="M18 86h60" className="stroke-debit" />
-      <path d="M18 86a30 30 0 0 0 60 0" className="stroke-debit" />
-
-      <path d="M162 86h60" className="stroke-credit" />
-      <path d="M162 86a30 30 0 0 0 60 0" className="stroke-credit" />
-    </svg>
+    </AuthLayout>
   )
 }

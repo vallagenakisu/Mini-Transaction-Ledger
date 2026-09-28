@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -123,13 +122,9 @@ export function AccountTransferDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>New transaction</DialogTitle>
-          <DialogDescription>
-            One side is <span className="text-ink">{account.name}</span>. Choose which side it
-            sits on, then the account facing it — both halves are posted as one entry.
-          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -174,9 +169,7 @@ export function AccountTransferDialog({
             hint={
               counter ? (
                 <AccountBalanceHint account={counter} />
-              ) : (
-                'The other half of the entry'
-              )
+              ) : null
             }
           >
             <AccountPicker

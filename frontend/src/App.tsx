@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import { AuthProvider } from '@/auth/AuthProvider'
-import { RequireAuth } from '@/auth/guards'
+import { RequireAdmin, RequireAuth } from '@/auth/guards'
 import { AppShell } from '@/components/AppShell'
 import { Toaster } from '@/components/ui/toaster'
 import Accounts from '@/pages/Accounts'
@@ -11,12 +11,14 @@ import Login from '@/pages/Login'
 import NewEntry from '@/pages/NewEntry'
 import NotFound from '@/pages/NotFound'
 import Overview from '@/pages/Overview'
+import Register from '@/pages/Register'
 import TrialBalance from '@/pages/TrialBalance'
+import Users from '@/pages/Users'
 
 /*
   The route table (01 §9).
 
-  Everything except /login sits behind one <RequireAuth> on the layout route rather than
+  Everything except /login and /register sits behind one <RequireAuth> on the layout route rather than
   repeated on each page — a route that forgets the guard is the kind of mistake that is
   invisible until someone finds it, so there is only one place to forget.
 
@@ -34,6 +36,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           <Route
             element={
@@ -50,6 +53,14 @@ export default function App() {
             <Route path="/transactions" element={<Journal />} />
             <Route path="/transactions/new" element={<NewEntry />} />
             <Route path="/reports/trial-balance" element={<TrialBalance />} />
+            <Route
+              path="/users"
+              element={
+                <RequireAdmin>
+                  <Users />
+                </RequireAdmin>
+              }
+            />
             {/* An old bookmark to /reports lands somewhere sensible. */}
             <Route path="/reports" element={<Navigate to="/reports/trial-balance" replace />} />
             <Route path="*" element={<NotFound />} />

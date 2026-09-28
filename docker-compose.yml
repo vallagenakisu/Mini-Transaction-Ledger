@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgress
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ledger
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgress -d ledger"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend/Ledger/Ledger
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=ledger;Username=postgress;Password=password"
+      Jwt__Key: "change-this-to-something-at-least-32-bytes-long"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:

@@ -136,11 +136,6 @@ export default function Journal() {
         ) : !journal.data || journal.data.items.length === 0 ? (
           <EmptyState
             title={filtered ? 'Nothing matches those filters' : 'The journal is empty'}
-            detail={
-              filtered
-                ? 'Try a wider date range, or clear the account filter.'
-                : 'Post the first entry to get started.'
-            }
             action={
               filtered ? (
                 <Button variant="outline" size="sm" onClick={resetFilters}>

@@ -10,10 +10,7 @@ import type { TransactionListItem } from '@/types/api'
 export function RecentJournal({ transactions }: { transactions: TransactionListItem[] }) {
   if (transactions.length === 0) {
     return (
-      <EmptyState
-        title="No entries yet"
-        detail="Post a transfer above, or use the general journal for an entry with more than two lines."
-      />
+      <EmptyState title="No entries yet" />
     )
   }
 

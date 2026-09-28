@@ -100,7 +100,6 @@ export default function AccountStatement() {
         <Figure
           label={filtered && from ? `Opening ${formatDate(`${from}T00:00:00Z`)}` : 'Opening balance'}
           value={statement.data?.openingBalance}
-          hint={from ? 'Sum of everything before the start date' : 'The account began at zero'}
         />
         <Figure
           label="Movement in period"
@@ -115,7 +114,6 @@ export default function AccountStatement() {
         <Figure
           label="Closing balance"
           value={statement.data?.closingBalance}
-          hint="Opening plus every entry in range"
           strong
         />
       </div>
@@ -165,11 +163,6 @@ export default function AccountStatement() {
         ) : !statement.data || statement.data.entries.length === 0 ? (
           <EmptyState
             title="No entries in this range"
-            detail={
-              filtered
-                ? 'Widen the dates, or clear them to see the whole history.'
-                : 'Nothing has been posted against this account yet.'
-            }
           />
         ) : (
           <>

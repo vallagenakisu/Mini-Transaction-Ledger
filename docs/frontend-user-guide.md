@@ -21,7 +21,7 @@ up, every API call 502s.
 
 | Role | Email | Password | Can do |
 |---|---|---|---|
-| Admin | `admin@misl.com` | `Admin@123` | everything, incl. open/edit/close accounts & reverse |
+| Admin | `admin@misl.com` | `Admin@123` | everything, incl. open/edit/close accounts, reverse, approve users |
 | Accountant | `accountant@misl.com` | `Accountant@123` | post entries & transfers, view everything; no admin actions |
 
 The login screen has click-to-fill buttons for both, so you never have to type these.
@@ -55,7 +55,12 @@ question the app already knew the answer to.
 ### 1. Login (`/login`)
 Split screen. Right side is the sign-in form plus the two demo-user shortcuts (click to
 fill). Left side (desktop only) is a single line drawing of a balance at rest, in the two
-ledger hues — no copy. No sign-up link: accounts are provisioned, not self-served.
+ledger hues — no copy. A **Register** link leads to `/register`.
+
+### 1a. Register (`/register`)
+Name, email, password (8+ characters), confirm. Anyone can register, but the new user is
+always an **Accountant** and starts **not active** — signing in says an administrator has
+to approve it. Anyone can ask for access; only an Admin can grant it.
 
 ### 2. Chart of accounts (`/`) — **the home screen**
 Every account as a card, grouped into sections by type (Asset, Liability, Equity, Income,
@@ -119,8 +124,14 @@ reporting on itself, not a place you change it.
 
 ### 7. Trial balance (`/reports/trial-balance`)
 Every account's total debits and credits as of a chosen date, with a verdict banner and a
-Print button. The footnote below the table says what the report does *not* prove — equal
-totals are a checksum on data integrity, not evidence the bookkeeping is right.
+Print button. Equal totals are a checksum on data integrity, not evidence the bookkeeping
+is right — worth knowing, though the page no longer says it.
+
+### 8. Users (`/users`) — Admin only
+Every user with their role and status. **Approve** activates a new registration;
+**Deactivate** blocks sign-in; the role dropdown switches Accountant ↔ Admin. Your own row
+has no controls, so the last admin can never lock everyone out. A role change applies at
+that user's next sign-in (the role travels inside their login token).
 
 ---
 

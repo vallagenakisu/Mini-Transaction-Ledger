@@ -70,10 +70,8 @@ export function ReverseDialog({
         <DialogHeader>
           <DialogTitle>Reverse this entry?</DialogTitle>
           <DialogDescription>
-            A new transaction will be posted with every line mirrored. Balances go back to
-            where they were; the journal gets one row longer, and{' '}
-            <span className="num text-ink">{transaction.reference}</span> stays exactly as it
-            was written.
+            Posts a mirrored entry. <span className="num text-ink">{transaction.reference}</span> is
+            kept.
           </DialogDescription>
         </DialogHeader>
 

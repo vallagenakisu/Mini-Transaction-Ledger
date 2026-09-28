@@ -174,7 +174,6 @@ export default function TrialBalance() {
             </PanelFooter>
           </Panel>
 
-          <Explanation />
         </>
       )}
     </div>
@@ -250,28 +249,3 @@ function Verdict({
  * outside the posting path, which is exactly the failure no amount of application code can
  * rule out. Saying this out loud is more convincing than the green tick.
  */
-function Explanation() {
-  return (
-    <section className="max-w-3xl space-y-3 rounded-panel border border-rule bg-card px-5 py-4 print:hidden">
-      <p className="eyebrow">What this report does and does not prove</p>
-      <p className="text-[0.875rem] leading-relaxed text-muted">
-        Equal grand totals are a <span className="text-ink">tautology used as a checksum</span>.
-        Every transaction was refused unless its own debits equalled its own credits, so the sum
-        over all of them cannot come out unequal. This report therefore does not prove the books
-        are <em className="not-italic text-ink">right</em> — an amount posted to the wrong
-        account balances perfectly.
-      </p>
-      <p className="text-[0.875rem] leading-relaxed text-muted">
-        What it proves is that nothing has written to the ledger outside the posting path: a
-        partial write, a hand-edited row, a dropped entry. That is the one class of failure the
-        application cannot defend against by itself, which is why the check is worth running and
-        worth putting on screen.
-      </p>
-      <p className="text-[0.8125rem] leading-relaxed text-faint">
-        Each line shows the account's <span className="text-muted">total</span> debits and
-        credits rather than a net figure, which is the convention this report follows — the
-        balance column carries the net, sign-corrected for the account's normal balance.
-      </p>
-    </section>
-  )
-}

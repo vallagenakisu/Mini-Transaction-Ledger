@@ -96,14 +96,9 @@ export function AccountDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{editing ? 'Edit account' : 'Open an account'}</DialogTitle>
-          <DialogDescription>
-            {editing
-              ? 'The number, type and currency are fixed once entries can refer to them.'
-              : `${meta.type} accounts are ${meta.normalBalance.toLowerCase()}-normal and numbered ${meta.range}.`}
-          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -248,7 +243,7 @@ export function DeactivateDialog({
           <DialogTitle>Close this account?</DialogTitle>
           <DialogDescription>
             <span className="num text-ink">{account.accountNumber}</span> {account.name} will stop
-            accepting entries (R16). Its history stays exactly where it is — nothing is deleted.
+            accepting entries.
           </DialogDescription>
         </DialogHeader>
 

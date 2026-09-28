@@ -34,6 +34,17 @@ public class AuthController : ControllerBase
             : Ok(result);
     }
 
+    [HttpPost("register")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<UserDto>> Register(RegisterRequestDto request)
+    {
+        var user = await _authService.RegisterAsync(request);
+
+        return StatusCode(StatusCodes.Status201Created, user);
+    }
+
     [HttpGet("me")]
     [Authorize]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]

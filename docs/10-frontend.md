@@ -413,12 +413,12 @@ explain.
 opening balance above it is the wrong starting point, and saying nothing is better than
 printing a figure that does not reconcile.
 
-**The trial balance carries a footnote saying what it does not prove.** Equal grand totals
+**What the trial balance does not prove** (this used to be an on-screen footnote; it was
+cut in the minimalism pass and lives here as the viva answer instead). Equal grand totals
 are a *tautology used as a checksum*: every transaction was refused unless its own debits
 equalled its own credits, so the sum cannot come out unequal. The report does not prove
 the books are right — an amount posted to the wrong account balances perfectly. What it
-proves is that nothing wrote to the ledger outside the posting path. Saying that out loud
-is more convincing than the green tick above it.
+proves is that nothing wrote to the ledger outside the posting path.
 
 **There is no route that edits or deletes a transaction.** The absence of those screens is
 the same design decision as the absence of `PUT` and `DELETE` on the API (R10).

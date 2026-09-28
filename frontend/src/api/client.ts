@@ -79,6 +79,11 @@ export async function post<T>(url: string, body?: unknown): Promise<T> {
   return data
 }
 
+export async function patch<T>(url: string, body?: unknown): Promise<T> {
+  const { data } = await api.patch<T>(url, body)
+  return data
+}
+
 export async function put<T>(url: string, body?: unknown): Promise<T> {
   const { data } = await api.put<T>(url, body)
   return data
