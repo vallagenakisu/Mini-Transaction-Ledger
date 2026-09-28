@@ -22,7 +22,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "5000:8080"
+      - "5086:8080"
 
   frontend:
     build: ./frontend
