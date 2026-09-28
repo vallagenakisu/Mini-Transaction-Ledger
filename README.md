@@ -41,6 +41,15 @@ To stop: `Ctrl+C`, then `docker compose down` (add `-v` to also wipe the databas
 
 ## Architecture
 
+A summary follows. For the full version, see **[ARCHITECTURE.md](ARCHITECTURE.md)**, which is the required written explanation. It covers:
+- the frontend layers and user flow
+- each backend layer: middleware pipeline, controllers, services, data access
+- request traces for login, posting and reversal
+- the data model
+- the Docker setup
+
+All of it is drawn as ASCII diagrams.
+
 ```
  browser
     │
@@ -95,6 +104,13 @@ sign-up exists, but nobody can act until an Admin grants access.
 
 ## API surface
 
+The routes are summarised below. **[API.md](API.md)** documents every endpoint in full:
+- request and response bodies with examples
+- validation rules and access level
+- every error the endpoint can return
+- what the server does internally on each call
+- an end-to-end `curl` walkthrough
+
 | Area | Routes |
 |---|---|
 | Auth | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me` |
@@ -115,6 +131,8 @@ sign-up exists, but nobody can act until an Admin grants access.
 
 ## Further reading
 
+- `ARCHITECTURE.md`: the written explanation, with detailed diagrams of every layer
+- `API.md`: full API reference, covering endpoints, payloads, errors and a curl walkthrough
 - `docs/frontend-user-guide.md` — a screen-by-screen walkthrough of the UI
 - `docs/00` through `docs/10` — the full design log, in build order: requirements,
   domain model, database, auth, transaction posting (atomicity/concurrency), reports,
